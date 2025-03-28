@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<head>
+    <link rel="shortcut icon" href="./images/coin_icon.png" type="image/x-icon">
+    <title>Платформер - Десктопна версія</title>
+    <meta charset="utf-8">
+
+    <script src="./js/phaser.min.js"></script>
+    <script type="module" src="./js/main.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #2c3e50;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #game {
+            width: 960px;
+            height: 600px;
+            margin: 0 auto 20px;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        canvas {
+            margin: 0 auto;
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .back-button {
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+            transition: transform 0.2s, background-color 0.2s;
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+        }
+        .back-button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div id="game"></div>
+    <a href="index.html" class="back-button">Повернутися на головну</a>
+</body>

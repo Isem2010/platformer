@@ -2,31 +2,50 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Платформер - Мобільна версія</title>
+    
+    <script src="./js/phaser.min.js"></script>
+    <script type="module" src="./js/main.js"></script>
+
     <style>
         body {
             margin: 0;
+            padding: 0;
+            background-color: #2c3e50;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: #2c3e50;
-            font-family: Arial, sans-serif;
-            padding: 1rem;
-            text-align: center;
+            overflow: hidden;
         }
 
-        .message {
-            color: #ecf0f1;
-            text-align: center;
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            max-width: 600px;
+        #game {
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            touch-action: none;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            pointer-events: none;
+            z-index: 1000;
         }
 
         .back-button {
@@ -35,75 +54,67 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            background-color: #3498db;
+            background-color: rgba(52, 152, 219, 0.8);
             color: white;
             transition: transform 0.2s, background-color 0.2s;
             text-decoration: none;
+            font-family: Arial, sans-serif;
+            pointer-events: auto;
         }
 
         .back-button:hover {
-            background-color: #2980b9;
+            background-color: rgba(41, 128, 185, 0.9);
             transform: scale(1.05);
         }
 
-        .rotate-icon {
-            width: 100px;
-            height: 100px;
-            margin: 20px auto;
-            animation: rotate 2s infinite;
-            display: none;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(90deg); }
-        }
-
-        .portrait-message {
-            display: none;
-            color: #e74c3c;
+        .portrait-message, .landscape-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
+            z-index: 2000;
         }
 
-        .landscape-message {
-            display: none;
-            color: #2ecc71;
-            text-align: center;
-        }
-
-        /* Портретна орієнтація */
         @media (orientation: portrait) {
-            .portrait-message, .rotate-icon {
+            .portrait-message {
                 display: block;
             }
             .landscape-message {
                 display: none;
             }
+            #game {
+                display: none;
+            }
         }
 
-        /* Ландшафтна орієнтація */
         @media (orientation: landscape) {
-            .portrait-message, .rotate-icon {
+            .portrait-message {
                 display: none;
             }
             .landscape-message {
+                display: none;
+            }
+            #game {
                 display: block;
             }
         }
     </style>
 </head>
 <body>
-    <div class="message">
-        <div class="portrait-message">
-            <div>Будь ласка, поверніть пристрій горизонтально для кращого ігрового досвіду</div>
-            <svg class="rotate-icon" viewBox="0 0 24 24" fill="white">
-                <path d="M16.48 2.52c3.27 1.55 5.61 4.72 5.97 8.48h1.5C23.44 4.84 18.29 0 12 0l-.66.03 3.81 3.81 1.33-1.32zm-6.25-.77c-.59-.59-1.54-.59-2.12 0L1.75 8.11c-.59.59-.59 1.54 0 2.12l12.02 12.02c.59.59 1.54.59 2.12 0l6.36-6.36c.59-.59.59-1.54 0-2.12L10.23 1.75zm4.6 19.44L2.81 9.17l6.36-6.36 12.02 12.02-6.36 6.36zm-7.31.29C4.25 19.94 1.91 16.76 1.55 13H.05C.56 19.16 5.71 24 12 24l.66-.03-3.81-3.81-1.33 1.32z"/>
-            </svg>
-        </div>
-        <div class="landscape-message">
-            Це вірні умови для мобільної гри
-        </div>
+    <div id="game"></div>
+    <div class="portrait-message">
+        Будь ласка, поверніть пристрій горизонтально для кращого ігрового досвіду
+        <svg class="rotate-icon" viewBox="0 0 24 24" fill="white" width="64" height="64">
+            <path d="M16.48 2.52c3.27 1.55 5.61 4.72 5.97 8.48h1.5C23.44 4.84 18.29 0 12 0l-.66.03 3.81 3.81 1.33-1.32zm-6.25-.77c-.59-.59-1.54-.59-2.12 0L1.75 8.11c-.59.59-.59 1.54 0 2.12l12.02 12.02c.59.59 1.54.59 2.12 0l6.36-6.36c.59-.59.59-1.54 0-2.12L10.23 1.75zm4.6 19.44L2.81 9.17l6.36-6.36 12.02 12.02-6.36 6.36zm-7.31.29C4.25 19.94 1.91 16.76 1.55 13H.05C.56 19.16 5.71 24 12 24l.66-.03-3.81-3.81-1.33 1.32z"/>
+        </svg>
     </div>
-    <a href="index.html" class="back-button">Повернутися на головну</a>
+    <div class="controls">
+        <a href="index.html" class="back-button">Повернутися на головну</a>
+    </div>
 </body>
 </html>

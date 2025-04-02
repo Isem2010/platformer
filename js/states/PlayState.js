@@ -2,6 +2,7 @@ import Hero from '../entities/Hero.js'
 import Spider from '../entities/Spider.js'
 import Boss from '../entities/Boss.js'
 import Constants from '../config/constants.js'
+import MobileControls from '../controls/MobileControls.js'
 
 /**
  * PlayState - основний стан гри, який керує ігровим процесом
@@ -53,6 +54,15 @@ export default {
                 })
             }
         }, this)
+        
+        // Визначаємо, чи це мобільний пристрій
+        this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+
+        // Налаштування масштабування
+        this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
+        this.game.scale.pageAlignHorizontally = true
+        this.game.scale.pageAlignVertically = true
+        this.game.scale.refresh()
     },
 
     /**
@@ -144,6 +154,11 @@ export default {
         this.sfx.bgm = this.game.add.audio('bgm')
         this.sfx.bgm.volume = Constants.AUDIO_VOLUME
         this.sfx.bgm.loopFull()
+        
+        // Створюємо мобільне керування, якщо потрібно
+        if (this.isMobile) {
+            this.mobileControls = new MobileControls(this.game, this.hero)
+        }
     },
 
     /**
@@ -161,6 +176,11 @@ export default {
         // Оновлюємо лічильник влучань бомбами
         if (this.boss && this.boss.exists) {
             this.bombHitsFont.text = 'X' + (Constants.BOSS_BOMB_HITS_REQUIRED - this.boss.bombHits).toString()
+        }
+        
+        // Оновлюємо мобільне керування
+        if (this.isMobile && this.mobileControls) {
+            this.mobileControls.update()
         }
     },
 
@@ -562,5 +582,17 @@ export default {
     _isDoorOpen: function (hero, door) {
         console.log('Door check - hasKey:', this.hasKey, 'touching down:', hero.body.touching.down)
         return this.hasKey && hero.body.touching.down
+    },
+    
+    shutdown: function () {
+        // Зупиняємо музику
+        if (this.bgm) {
+            this.bgm.stop()
+        }
+        
+        // Видаляємо мобільне керування
+        if (this.mobileControls) {
+            this.mobileControls.destroy()
+        }
     }
 }

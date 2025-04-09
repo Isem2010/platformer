@@ -25,7 +25,7 @@ export default class MobileControls {
         this.buttonGroup = this.game.add.group()
 
         // Ліва кнопка
-        this.leftButton = this.game.add.text(50, this.game.height - 100, '←', buttonStyle)
+        this.leftButton = this.game.add.text(30, this.game.height - 200, ' ← ', buttonStyle)
         this.leftButton.inputEnabled = true
         this.leftButton.input.priorityID = 1  // Вищий пріоритет для кнопок
         this.leftButton.events.onInputDown.add(() => this.onLeftDown())
@@ -34,7 +34,7 @@ export default class MobileControls {
         this.buttonGroup.add(this.leftButton)
 
         // Права кнопка
-        this.rightButton = this.game.add.text(150, this.game.height - 100, '→', buttonStyle)
+        this.rightButton = this.game.add.text(80, this.game.height - 150, ' → ', buttonStyle)
         this.rightButton.inputEnabled = true
         this.rightButton.input.priorityID = 1
         this.rightButton.events.onInputDown.add(() => this.onRightDown())
@@ -43,7 +43,7 @@ export default class MobileControls {
         this.buttonGroup.add(this.rightButton)
 
         // Кнопка стрибка
-        this.jumpButton = this.game.add.text(this.game.width - 150, this.game.height - 100, '↑', buttonStyle)
+        this.jumpButton = this.game.add.text(this.game.width - 80, this.game.height - 200, '  ↑  ', buttonStyle)
         this.jumpButton.inputEnabled = true
         this.jumpButton.input.priorityID = 1
         this.jumpButton.events.onInputDown.add(() => this.onJumpDown())
@@ -52,7 +52,7 @@ export default class MobileControls {
         this.buttonGroup.add(this.jumpButton)
 
         // Кнопка кидання бомби
-        this.throwButton = this.game.add.text(this.game.width - 80, this.game.height - 100, '💣', buttonStyle)
+        this.throwButton = this.game.add.text(this.game.width - 130, this.game.height - 150, '💣', buttonStyle)
         this.throwButton.inputEnabled = true
         this.throwButton.input.priorityID = 1
         this.throwButton.events.onInputDown.add(() => this.onThrowDown())

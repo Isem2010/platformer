@@ -136,7 +136,14 @@
             }
         } 
         document.addEventListener("DOMContentLoaded", function () {
-            toggleFullScreen()
+            // toggleFullScreen()
+            document.addEventListener("touchstart", function firstTouch () {
+                try {
+                    toggleFullScreen()
+                } catch (error) {
+                    console.log(error)
+                }
+            },{once:true})
         })
     </script>
 </body>
